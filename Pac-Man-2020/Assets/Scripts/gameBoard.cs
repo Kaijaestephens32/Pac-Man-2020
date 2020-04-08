@@ -93,6 +93,52 @@ public class gameBoard : MonoBehaviour
     }
   
 
+    public void PauseGame(float waitTime)
+    {
+        StartCoroutine(SuspendState(waitTime));
+    }
+
+    IEnumerator SuspendState(float waitTime)
+    {
+        Debug.Log("Getting Called Here");
+        GameObject BackgroundSound = GameObject.Find("BackgroundSound");
+        GameObject Inky = GameObject.Find(Ghost1);
+        GameObject Blinky = GameObject.Find(Ghost2);
+        GameObject Clyde = GameObject.Find(Ghost3);
+        GameObject Pinky = GameObject.Find(Ghost4);
+        GameObject PacMan = GameObject.Find(PacManName);
+        GameObject readySprite = GameObject.Find(ready);
+        BackgroundSound.GetComponent<AudioSource>().Stop();
+
+        Time.timeScale = 0.0f;
+        Inky.GetComponent<GhostController>().enabled = false;
+        Inky.GetComponent<Animator>().enabled = false;
+        Blinky.GetComponent<GhostController>().enabled = false;
+        Blinky.GetComponent<Animator>().enabled = false;
+        Clyde.GetComponent<GhostController>().enabled = false;
+        Clyde.GetComponent<Animator>().enabled = false;
+        Pinky.GetComponent<GhostController>().enabled = false;
+        Pinky.GetComponent<Animator>().enabled = false;
+        PacMan.GetComponent<PacManController>().enabled = false;
+        PacMan.GetComponent<Animator>().enabled = false;
+
+        Time.timeScale = 1.0f;
+        yield return new WaitForSeconds(waitTime); //delay once pacman hits ghost, initiates death animation
+        //Ghost contact sound/ death sound
+        //Disable Scripts for death delay.
+        Inky.GetComponent<GhostController>().enabled = true;
+        Inky.GetComponent<Animator>().enabled = true;
+        Blinky.GetComponent<GhostController>().enabled = true;
+        Blinky.GetComponent<Animator>().enabled = true;
+        Clyde.GetComponent<GhostController>().enabled = true;
+        Clyde.GetComponent<Animator>().enabled = true;
+        Pinky.GetComponent<GhostController>().enabled = true;
+        Pinky.GetComponent<Animator>().enabled = true;
+        PacMan.GetComponent<PacManController>().enabled = true;
+        PacMan.GetComponent<Animator>().enabled = true;
+        BackgroundSound.GetComponent<AudioSource>().Play();
+    }
+
     IEnumerator RepositionCharactersAndDelay()
     {
         GameObject DeathSound = GameObject.Find("DeathSound");
